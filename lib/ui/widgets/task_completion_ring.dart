@@ -11,12 +11,28 @@ class TaskCompletionRing extends StatelessWidget {
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 1.0,
-      child: CustomPaint(
-        painter: RingPainter(
-          progress: progress,
-          taskNotCompletedColor: AppTheme.of(context).taskRing,
-          taskCompletedColor: AppTheme.of(context).accent,
-        ),
+      child: progress < 1
+          ? CustomPaint(
+              painter: RingPainter(
+                progress: progress,
+                taskNotCompletedColor: AppTheme.of(context).taskRing,
+                taskCompletedColor: AppTheme.of(context).accent,
+              ),
+            )
+          : CompletedTask(),
+    );
+  }
+}
+
+class CompletedTask extends StatelessWidget {
+  const CompletedTask({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppTheme.of(context).accent,
       ),
     );
   }
@@ -34,9 +50,9 @@ class RingPainter extends CustomPainter {
   final Color taskCompletedColor;
   @override
   void paint(Canvas canvas, Size size) {
-    final strokeWidth = size.width / 10.0;
+    final strokeWidth = size.width / 15.0;
     final center = Offset(size.width / 2, size.height / 2);
-    final radius = size.width - strokeWidth / 2;
+    final radius = (size.width - strokeWidth) / 2;
 
     final backgroundPaint = Paint()
       ..isAntiAlias = true

@@ -9,9 +9,7 @@ class homePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.of(context).primary,
-      body: Center(
-        child: SizedBox(width: 120, child: AnimatedTask()),
-      ),
+      body: Center(child: SizedBox(width: 180, child: AnimatedTask())),
     );
   }
 }
