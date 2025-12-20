@@ -10,7 +10,7 @@ class TasksGrid extends StatelessWidget {
     return GridView.builder(
         physics: NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 0.85,
+          childAspectRatio: 0.8,
           crossAxisCount: 2,
           crossAxisSpacing: 16,
           mainAxisSpacing: 16,
