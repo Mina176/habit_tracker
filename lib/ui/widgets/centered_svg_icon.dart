@@ -10,7 +10,7 @@ class CenteredSvgIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isSvg = iconName.endsWith('.svg');
-    final factor = isSvg ? 0.8 : 1;
+    final factor = isSvg ? 0.8 : 1.0;
     return FractionallySizedBox(
       widthFactor: factor,
       heightFactor: factor,

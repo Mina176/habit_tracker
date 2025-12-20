@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/ui/theming/app_theme.dart';
-import 'package:habit_tracker/ui/widgets/task_completion_ring.dart';
+import 'package:habit_tracker/ui/widgets/animated_task.dart';
 
 class homePage extends StatelessWidget {
   const homePage({super.key});
@@ -10,10 +10,7 @@ class homePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppTheme.of(context).primary,
       body: Center(
-        child: SizedBox(
-          width: 120,
-          child: taskCompletionRing(),
-        ),
+        child: SizedBox(width: 120, child: AnimatedTask()),
       ),
     );
   }

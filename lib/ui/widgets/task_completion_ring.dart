@@ -3,8 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/ui/theming/app_theme.dart';
 
-class taskCompletionRing extends StatelessWidget {
-  const taskCompletionRing({super.key});
+class TaskCompletionRing extends StatelessWidget {
+  const TaskCompletionRing({super.key, required this.progress});
+  final double progress;
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,7 @@ class taskCompletionRing extends StatelessWidget {
       aspectRatio: 1.0,
       child: CustomPaint(
         painter: RingPainter(
-          progress: 0.5,
+          progress: progress,
           taskNotCompletedColor: AppTheme.of(context).taskRing,
           taskCompletedColor: AppTheme.of(context).accent,
         ),
