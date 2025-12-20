@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:habit_tracker/constants/app_assets.dart';
 import 'package:habit_tracker/ui/theming/app_theme.dart';
 import 'package:habit_tracker/ui/widgets/centered_svg_icon.dart';
-import 'package:habit_tracker/ui/widgets/task_completion_ring.dart';
+import 'package:habit_tracker/ui/task/task_completion_ring.dart';
 
 class AnimatedTask extends StatefulWidget {
-  const AnimatedTask({super.key});
+  const AnimatedTask({super.key, required this.iconName});
+  final String iconName;
 
   @override
   State<AnimatedTask> createState() => _AnimatedTaskState();
@@ -88,7 +89,7 @@ class _AnimatedTaskState extends State<AnimatedTask>
                   child: CenteredSvgIcon(
                     iconName: hasCompleted && _showCheckIcon
                         ? AppAssets.check
-                        : AppAssets.dog,
+                        : widget.iconName,
                     color: iconColor,
                   ),
                 ),
