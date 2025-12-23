@@ -21,19 +21,34 @@ class HiveDataStore {
     return Hive.box<Task>(tasksBoxName).listenable();
   }
 
+  Future<void> createDemoTasks(
+      {required List<Task> tasks, required bool force}) async {
+    final box = Hive.box<Task>(tasksBoxName);
+    if (box.isEmpty) {
+      box.addAll(tasks);
+    } else {
+      print('Box Already has ${box.length}');
+    }
+  }
+
+  Future<void> setTaskState({
+    required Task task,
+    required bool completed,
+  }) async {
+    final box = Hive.box<TaskState>(tasksStateBoxName);
+    final taskState = TaskState(taskId: task.id, completed: completed);
+    await box.put(taskStateKey(task.id), taskState);
+  }
+
   ValueListenable<Box<TaskState>> tasksStateListenable({required Task task}) {
     final box = Hive.box<TaskState>(tasksStateBoxName);
     final key = taskStateKey(task.id);
     return box.listenable(keys: [key]);
   }
 
-  Future<void> setTaskState({
-    required Task taskId,
-    required bool completed,
-  }) async {
-    final box = Hive.box<TaskState>(tasksStateBoxName);
-    final taskState = TaskState(taskId: taskId, completed: completed);
-    await box.put(taskStateKey(taskId), taskState);
+  TaskState taskState(Box<TaskState> box, {required Task task}) {
+    final key = taskStateKey(task.id);
+    return box.get(key) ?? TaskState(taskId: task.id, completed: false);
   }
 }
 

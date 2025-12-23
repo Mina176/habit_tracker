@@ -17,7 +17,7 @@ class TaskStateAdapter extends TypeAdapter<TaskState> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return TaskState(
-      taskId: fields[0] as int,
+      taskId: fields[0] as String,
       completed: fields[1] as bool,
     );
   }

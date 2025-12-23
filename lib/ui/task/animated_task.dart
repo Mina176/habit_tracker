@@ -5,8 +5,14 @@ import 'package:habit_tracker/ui/widgets/centered_svg_icon.dart';
 import 'package:habit_tracker/ui/task/task_completion_ring.dart';
 
 class AnimatedTask extends StatefulWidget {
-  const AnimatedTask({super.key, required this.iconName});
+  const AnimatedTask(
+      {super.key,
+      required this.iconName,
+      required this.completed,
+      this.onCompleted});
   final String iconName;
+  final bool completed;
+  final ValueChanged<bool>? onCompleted;
 
   @override
   State<AnimatedTask> createState() => _AnimatedTaskState();
@@ -42,7 +48,8 @@ class _AnimatedTaskState extends State<AnimatedTask>
   }
 
   void _checkStatusUpdates(AnimationStatus status) {
-    if (status == AnimationStatus.completed) if (mounted) {
+    if (status == AnimationStatus.completed) widget.onCompleted?.call(true);
+    if (mounted) {
       setState(() => _showCheckIcon = true);
     }
     Future.delayed(Duration(seconds: 2), () {
@@ -53,9 +60,11 @@ class _AnimatedTaskState extends State<AnimatedTask>
   }
 
   void handleTapDown(TapDownDetails details) {
-    if (_animationController.status != AnimationStatus.completed) {
+    if (!widget.completed &&
+        _animationController.status != AnimationStatus.completed) {
       _animationController.forward();
     } else if (!_showCheckIcon) {
+      widget.onCompleted?.call(false);
       _animationController.reset();
     }
   }
@@ -76,7 +85,7 @@ class _AnimatedTaskState extends State<AnimatedTask>
           animation: _curveAnimation,
           builder: (BuildContext context, Widget? child) {
             final themeData = AppTheme.of(context);
-            final progress = _curveAnimation.value;
+            final progress = widget.completed ? 1.0 : _curveAnimation.value;
             final hasCompleted = progress == 1;
             final iconColor =
                 hasCompleted ? themeData.accentNegative : themeData.taskIcon;

@@ -32,6 +32,8 @@ class TasksGridContents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TasksGrid();
+    return TasksGrid(
+      tasks: tasks,
+    );
   }
 }
