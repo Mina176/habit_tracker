@@ -15,7 +15,9 @@ class TasksGridPage extends StatelessWidget {
       backgroundColor: AppTheme.of(context).primary,
       body: Padding(
         padding: const EdgeInsets.all(24),
-        child: TasksGridContents(),
+        child: TasksGridContents(
+          tasks: tasks,
+        ),
       ),
     );
   }
@@ -24,7 +26,9 @@ class TasksGridPage extends StatelessWidget {
 class TasksGridContents extends StatelessWidget {
   const TasksGridContents({
     super.key,
+    required this.tasks,
   });
+  final List<Task> tasks;
 
   @override
   Widget build(BuildContext context) {
