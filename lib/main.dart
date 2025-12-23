@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habit_tracker/constants/app_assets.dart';
 import 'package:habit_tracker/constants/app_colors.dart';
 import 'package:habit_tracker/persistence/hive_data_store.dart';
@@ -10,7 +11,9 @@ Future<void> main() async {
   await AppAssets.preloadSVGs();
   final dataStore = HiveDataStore();
   await dataStore.init();
-  runApp(const MainApp());
+  runApp(ProviderScope(
+      overrides: [dataStoreProvider.overrideWithValue(dataStore)],
+      child: MainApp()));
 }
 
 class MainApp extends StatelessWidget {
