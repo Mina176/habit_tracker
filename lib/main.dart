@@ -14,13 +14,21 @@ Future<void> main() async {
   final dataStore = HiveDataStore();
   await dataStore.init();
   await dataStore.createDemoTasks(
-    tasks: [
-      Task.create(name: 'Cycle to Work', iconName: AppAssets.bike),
-      Task.create(name: 'Wash Your Hands', iconName: AppAssets.washHands),
-      Task.create(name: 'Wear a Mask', iconName: AppAssets.mask),
+    frontTasks: [
+      Task.create(name: 'Decrease Screen Time', iconName: AppAssets.phone),
+      Task.create(name: 'Do a Workout', iconName: AppAssets.dumbell),
+      Task.create(name: 'Do Karate', iconName: AppAssets.karate),
+      Task.create(name: 'Go Running', iconName: AppAssets.run),
+      Task.create(name: 'Go Swimming', iconName: AppAssets.swimmer),
+      Task.create(name: 'Do Some Stretches', iconName: AppAssets.stretching),
+    ],
+    backTasks: [
       Task.create(name: 'Brush Your Teeth', iconName: AppAssets.toothbrush),
       Task.create(name: 'Floss Your Teeth', iconName: AppAssets.dentalFloss),
       Task.create(name: 'Drink Water', iconName: AppAssets.water),
+      Task.create(name: 'Practice Instrument', iconName: AppAssets.guitar),
+      Task.create(name: 'Read for 10 Minutes', iconName: AppAssets.book),
+      Task.create(name: 'Don\'t Smoke', iconName: AppAssets.smoking),
     ],
     force: false,
   );
@@ -37,7 +45,12 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: 'HelveticaNeue'),
+      theme: ThemeData(
+        fontFamily: 'HelveticaNeue',
+        splashColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+      ),
       home: AppTheme(
         data: AppThemeData.defaultWithSwatch(AppColors.red),
         child: homePage(),

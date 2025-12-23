@@ -27,9 +27,7 @@ class TaskWithName extends StatelessWidget {
             onCompleted: onCompleted,
           ),
         ),
-        SizedBox(
-          height: 8,
-        ),
+        SizedBox(height: 8),
         Text(
           task.name.toUpperCase(),
           style:

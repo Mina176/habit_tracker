@@ -9,20 +9,23 @@ class TasksGrid extends StatelessWidget {
   final List<Task> tasks;
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-        physics: NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 0.8,
-          crossAxisCount: 2,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-        ),
-        itemCount: 6,
-        itemBuilder: (context, index) {
-          final task = tasks[index];
-          return TaskWWithNameLoader(
-            task: task,
-          );
-        });
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+      child: GridView.builder(
+          physics: NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            childAspectRatio: 0.85,
+            crossAxisCount: 2,
+            crossAxisSpacing: 6,
+            mainAxisSpacing: 6,
+          ),
+          itemCount: tasks.length,
+          itemBuilder: (context, index) {
+            final task = tasks[index];
+            return TaskWWithNameLoader(
+              task: task,
+            );
+          }),
+    );
   }
 }
