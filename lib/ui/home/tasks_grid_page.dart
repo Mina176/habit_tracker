@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:habit_tracker/models/app_theme_settings.dart';
 import 'package:habit_tracker/models/task.dart';
 import 'package:habit_tracker/ui/home/home_page_bottom_options.dart';
@@ -16,11 +17,21 @@ class TasksGridPage extends StatelessWidget {
     required this.onFlip,
     required this.leftAnimatorKey,
     required this.rightAnimatorKey,
+    required this.themeSettings,
+    this.onColorIndexSelected,
+    this.onVariantIndexSelected,
   });
   final List<Task> tasks;
   final VoidCallback? onFlip;
   final GlobalKey<SlidingPanelAnimatorState> leftAnimatorKey;
   final GlobalKey<SlidingPanelAnimatorState> rightAnimatorKey;
+  final AppThemeSettings themeSettings;
+  final ValueChanged<int>? onColorIndexSelected;
+  final ValueChanged<int>? onVariantIndexSelected;
+
+  void _animateTheme(ThemeData themeData) {
+    
+  }
 
   void _enterEditMode() {
     leftAnimatorKey.currentState?.slidIn();
@@ -34,42 +45,53 @@ class TasksGridPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.of(context).primary,
-      body: Stack(
-        children: [
-          TasksGridContents(
-              tasks: tasks, onFlip: onFlip, onEnterEditMode: _enterEditMode),
-          Positioned(
-            bottom: 6,
-            left: 0,
-            width: SlidingPanel.leftPanelFixedWidth,
-            child: SlidingPanelAnimator(
-              key: leftAnimatorKey,
-              direction: SlideDirection.leftToRight,
-              child: ThemeSelectionClose(
-                onClose: _exitEditMode,
-              ),
+    return AppTheme(
+      data: themeSettings.themeData,
+      child: Builder(
+        builder: (context) => AnnotatedRegion<SystemUiOverlayStyle>(
+          value: AppTheme.of(context).overlayStyle,
+          child: Scaffold(
+            backgroundColor: AppTheme.of(context).primary,
+            body: Stack(
+              children: [
+                TasksGridContents(
+                    tasks: tasks,
+                    onFlip: onFlip,
+                    onEnterEditMode: _enterEditMode),
+                Positioned(
+                  bottom: 6,
+                  left: 0,
+                  width: SlidingPanel.leftPanelFixedWidth,
+                  child: SlidingPanelAnimator(
+                    key: leftAnimatorKey,
+                    direction: SlideDirection.leftToRight,
+                    child: ThemeSelectionClose(
+                      onClose: _exitEditMode,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 6,
+                  right: 0,
+                  width: MediaQuery.of(context).size.width -
+                      SlidingPanel.leftPanelFixedWidth,
+                  child: SlidingPanelAnimator(
+                    key: rightAnimatorKey,
+                    direction: SlideDirection.rightToLeft,
+                    child: ThemeSelectionList(
+                      currentThemeSettings: themeSettings,
+                      availableWidth: MediaQuery.of(context).size.width -
+                          SlidingPanel.leftPanelFixedWidth -
+                          SlidingPanel.paddingWidth,
+                      onColorIndexSelected: onColorIndexSelected,
+                      onVariantIndexSelected: onVariantIndexSelected,
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
-          Positioned(
-            bottom: 6,
-            right: 0,
-            width: MediaQuery.of(context).size.width -
-                SlidingPanel.leftPanelFixedWidth,
-            child: SlidingPanelAnimator(
-              key: rightAnimatorKey,
-              direction: SlideDirection.rightToLeft,
-              child: ThemeSelectionList(
-                currentThemeSettings:
-                    AppThemeSettings(colorIndex: 0, variantIndex: 0),
-                availableWidth: MediaQuery.of(context).size.width -
-                    SlidingPanel.leftPanelFixedWidth -
-                    SlidingPanel.paddingWidth,
-              ),
-            ),
-          )
-        ],
+        ),
       ),
     );
   }
