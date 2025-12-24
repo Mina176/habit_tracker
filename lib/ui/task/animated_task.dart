@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/constants/app_assets.dart';
 import 'package:habit_tracker/ui/animations/animation_controller_state.dart';
-import 'package:habit_tracker/ui/sliding_panel/sliding_panel_animator.dart';
 import 'package:habit_tracker/ui/theming/app_theme.dart';
 import 'package:habit_tracker/ui/widgets/centered_svg_icon.dart';
 import 'package:habit_tracker/ui/task/task_completion_ring.dart';
@@ -11,10 +10,14 @@ class AnimatedTask extends StatefulWidget {
       {super.key,
       required this.iconName,
       required this.completed,
-      this.onCompleted});
+      this.onCompleted,
+      required this.isEditing,
+      required this.hasCompletedState});
   final String iconName;
   final bool completed;
   final ValueChanged<bool>? onCompleted;
+  final bool isEditing;
+  final bool hasCompletedState;
 
   @override
   _AnimatedTaskState createState() =>
@@ -46,18 +49,23 @@ class _AnimatedTaskState extends AnimationControllerState<AnimatedTask> {
 
   void _checkStatusUpdates(AnimationStatus status) {
     if (status == AnimationStatus.completed) widget.onCompleted?.call(true);
-    if (mounted) {
-      setState(() => _showCheckIcon = true);
-    }
-    Future.delayed(Duration(seconds: 2), () {
+    if (widget.hasCompletedState) {
       if (mounted) {
-        setState(() => _showCheckIcon = false);
+        setState(() => _showCheckIcon = true);
       }
-    });
+      Future.delayed(const Duration(seconds: 1), () {
+        if (mounted) {
+          setState(() => _showCheckIcon = false);
+        }
+      });
+    } else {
+      animationController.value = 0.0;
+    }
   }
 
   void handleTapDown(TapDownDetails details) {
     if (!widget.completed &&
+        !widget.isEditing &&
         animationController.status != AnimationStatus.completed) {
       animationController.forward();
     } else if (!_showCheckIcon) {
@@ -66,8 +74,9 @@ class _AnimatedTaskState extends AnimationControllerState<AnimatedTask> {
     }
   }
 
-  void handleTapUp() {
-    if (animationController.status != AnimationStatus.completed) {
+  void handleTapCancel() {
+    if (!widget.isEditing &&
+        animationController.status != AnimationStatus.completed) {
       animationController.reverse();
     }
   }
@@ -76,8 +85,8 @@ class _AnimatedTaskState extends AnimationControllerState<AnimatedTask> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapDown: handleTapDown,
-      onTapUp: (_) => handleTapUp(),
-      onTapCancel: handleTapUp,
+      onTapUp: (_) => handleTapCancel(),
+      onTapCancel: handleTapCancel,
       child: AnimatedBuilder(
           animation: _curveAnimation,
           builder: (BuildContext context, Widget? child) {

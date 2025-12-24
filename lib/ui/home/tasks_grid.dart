@@ -1,31 +1,53 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:habit_tracker/models/task.dart';
-import 'package:habit_tracker/models/task_preset.dart';
-import 'package:habit_tracker/ui/task/task_with_name.dart';
 import 'package:habit_tracker/ui/task/task_with_name_loader.dart';
+import 'package:habit_tracker/ui/widgets/edit_task_button.dart';
 
-class TasksGrid extends StatelessWidget {
-  const TasksGrid({super.key, required this.tasks});
+class TasksGrid extends StatefulWidget {
+  const TasksGrid({super.key, required this.tasks, this.onEditTask});
   final List<Task> tasks;
+  final VoidCallback? onEditTask;
+
+  @override
+  TasksGridState createState() => TasksGridState();
+}
+
+class TasksGridState extends State<TasksGrid> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
-      child: GridView.builder(
-          physics: NeverScrollableScrollPhysics(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final crossAxisSpacing = constraints.maxWidth * 0.05;
+        final taskWidth = (constraints.maxWidth - crossAxisSpacing) / 2.0;
+        const aspectRatio = 0.82;
+        final taskHeight = taskWidth / aspectRatio;
+        // Use max(x, 0.1) to prevent layout error when keyword is visible in modal page
+        final mainAxisSpacing =
+            max((constraints.maxHeight - taskHeight * 3) / 2.0, 0.1);
+        final tasksLength = widget.tasks.length;
+        return GridView.builder(
+          physics: const NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            childAspectRatio: 0.85,
             crossAxisCount: 2,
-            crossAxisSpacing: 6,
-            mainAxisSpacing: 6,
+            crossAxisSpacing: crossAxisSpacing,
+            mainAxisSpacing: mainAxisSpacing,
+            childAspectRatio: aspectRatio,
           ),
-          itemCount: tasks.length,
           itemBuilder: (context, index) {
-            final task = tasks[index];
-            return TaskWWithNameLoader(
+            final task = widget.tasks[index];
+            return TaskWithNameLoader(
               task: task,
+              isEditing: false,
+              editTaskButtonBuilder: (_) => EditTaskButton(
+                onPressed: () => debugPrint('Edit Item'),
+              ),
             );
-          }),
+          },
+          itemCount: tasksLength,
+        );
+      },
     );
   }
 }

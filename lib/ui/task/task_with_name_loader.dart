@@ -6,9 +6,16 @@ import 'package:habit_tracker/persistence/hive_data_store.dart';
 import 'package:habit_tracker/ui/task/task_with_name.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-class TaskWWithNameLoader extends ConsumerWidget {
-  const TaskWWithNameLoader({required this.task, super.key});
+class TaskWithNameLoader extends ConsumerWidget {
+  const TaskWithNameLoader({
+    super.key,
+    required this.task,
+    this.isEditing = false,
+    this.editTaskButtonBuilder,
+  });
   final Task task;
+  final bool isEditing;
+  final WidgetBuilder? editTaskButtonBuilder;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dataStore = ref.watch(dataStoreProvider);
@@ -19,11 +26,13 @@ class TaskWWithNameLoader extends ConsumerWidget {
         return TaskWithName(
           task: task,
           completed: taskState.completed,
+          isEditing: isEditing,
           onCompleted: (completed) {
             ref
                 .read(dataStoreProvider)
                 .setTaskState(task: task, completed: completed);
           },
+          editTaskButtonBuilder: editTaskButtonBuilder,
         );
       },
     );

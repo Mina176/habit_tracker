@@ -23,15 +23,15 @@ class SlidingPanelAnimatorState
   ).animate(
       CurvedAnimation(parent: animationController, curve: Curves.easeInCubic));
 
-  void slidIn() {
+  void slideIn() {
     animationController.forward();
   }
 
-  void slidOut() {
+  void slideOut() {
     animationController.reverse();
   }
 
-  double _getOffSetX(double screenWidth, double animationValue) { 
+  double _getOffSetX(double screenWidth, double animationValue) {
     final startOffset = widget.direction == SlideDirection.rightToLeft
         ? screenWidth - SlidingPanel.leftPanelFixedWidth
         : -SlidingPanel.leftPanelFixedWidth;

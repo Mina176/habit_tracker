@@ -2,72 +2,77 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habit_tracker/models/task.dart';
 import 'package:habit_tracker/persistence/hive_data_store.dart';
+import 'package:habit_tracker/ui/home/tasks_grid.dart';
 import 'package:habit_tracker/ui/home/tasks_grid_page.dart';
 import 'package:habit_tracker/ui/sliding_panel/sliding_panel_animator.dart';
-import 'package:habit_tracker/ui/theming/app_theme.dart';
 import 'package:habit_tracker/ui/theming/app_theme_manager.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive/hive.dart';
 import 'package:page_flip_builder/page_flip_builder.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends ConsumerState<HomePage> {
   final _pageFlipKey = GlobalKey<PageFlipBuilderState>();
   final _frontSlidingPanelLeftAnimatorKey =
       GlobalKey<SlidingPanelAnimatorState>();
   final _frontSlidingPanelRightAnimatorKey =
       GlobalKey<SlidingPanelAnimatorState>();
+  final _frontGridKey = GlobalKey<TasksGridState>();
   final _backSlidingPanelLeftAnimatorKey =
       GlobalKey<SlidingPanelAnimatorState>();
   final _backSlidingPanelRightAnimatorKey =
       GlobalKey<SlidingPanelAnimatorState>();
+  final _backGridKey = GlobalKey<TasksGridState>();
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(builder: (_, ref, __) {
-      final dataStore = ref.watch(dataStoreProvider);
-      return PageFlipBuilder(
+    final dataStore = ref.watch(dataStoreProvider);
+    return Container(
+      color: Colors.black,
+      child: PageFlipBuilder(
         key: _pageFlipKey,
         frontBuilder: (_) => ValueListenableBuilder(
           valueListenable: dataStore.frontTasksListenable(),
-          builder: (context, Box<Task> box, child) => TasksGridPage(
-            themeSettings: ref.watch(frontThemeManagerProvider),
-            key: ValueKey(1),
+          builder: (_, Box<Task> box, __) => TasksGridPage(
+            key: const ValueKey(1),
             leftAnimatorKey: _frontSlidingPanelLeftAnimatorKey,
             rightAnimatorKey: _frontSlidingPanelRightAnimatorKey,
+            gridKey: _frontGridKey,
             tasks: box.values.toList(),
             onFlip: () => _pageFlipKey.currentState?.flip(),
+            themeSettings: ref.watch(frontThemeManagerProvider),
             onColorIndexSelected: (colorIndex) => ref
-                .watch(frontThemeManagerProvider.notifier)
+                .read(frontThemeManagerProvider.notifier)
                 .updateColorIndex(colorIndex),
             onVariantIndexSelected: (variantIndex) => ref
-                .watch(frontThemeManagerProvider.notifier)
+                .read(frontThemeManagerProvider.notifier)
                 .updateVariantIndex(variantIndex),
           ),
         ),
         backBuilder: (_) => ValueListenableBuilder(
           valueListenable: dataStore.backTasksListenable(),
-          builder: (context, Box<Task> box, child) => TasksGridPage(
-            themeSettings: ref.watch(backThemeManagerProvider),
-            key: ValueKey(2),
+          builder: (_, Box<Task> box, __) => TasksGridPage(
+            key: const ValueKey(2),
             leftAnimatorKey: _backSlidingPanelLeftAnimatorKey,
             rightAnimatorKey: _backSlidingPanelRightAnimatorKey,
+            gridKey: _backGridKey,
             tasks: box.values.toList(),
             onFlip: () => _pageFlipKey.currentState?.flip(),
+            themeSettings: ref.watch(backThemeManagerProvider),
             onColorIndexSelected: (colorIndex) => ref
-                .watch(backThemeManagerProvider.notifier)
+                .read(backThemeManagerProvider.notifier)
                 .updateColorIndex(colorIndex),
             onVariantIndexSelected: (variantIndex) => ref
-                .watch(backThemeManagerProvider.notifier)
+                .read(backThemeManagerProvider.notifier)
                 .updateVariantIndex(variantIndex),
           ),
         ),
-      );
-    });
+      ),
+    );
   }
 }
