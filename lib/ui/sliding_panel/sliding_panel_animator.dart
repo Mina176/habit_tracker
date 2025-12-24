@@ -13,15 +13,14 @@ class SlidingPanelAnimator extends StatefulWidget {
       SlidingPanelAnimatorState(Duration(milliseconds: 300));
 }
 
-class SlidingPanelAnimatorState
-    extends AnimationControllerState<SlidingPanelAnimator> {
+class SlidingPanelAnimatorState extends AnimationState<SlidingPanelAnimator> {
   SlidingPanelAnimatorState(Duration duration) : super(duration);
 
   late final _curveAnimation = Tween(
     begin: 0.0,
     end: 1.0,
-  ).animate(
-      CurvedAnimation(parent: animationController, curve: Curves.easeInCubic));
+  ).animate(CurvedAnimation(
+      parent: animationController, curve: Curves.easeInCubic));
 
   void slideIn() {
     animationController.forward();

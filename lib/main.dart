@@ -19,7 +19,7 @@ Future<void> main() async {
       Task.create(name: 'Do Karate', iconName: AppAssets.karate),
       Task.create(name: 'Go Running', iconName: AppAssets.run),
       Task.create(name: 'Go Swimming', iconName: AppAssets.swimmer),
-      Task.create(name: 'Do Some Stretches', iconName: AppAssets.stretching),
+      // Task.create(name: 'Do Some Stretches', iconName: AppAssets.stretching),
     ],
     backTasks: [
       Task.create(name: 'Brush Your Teeth', iconName: AppAssets.toothbrush),
@@ -27,7 +27,7 @@ Future<void> main() async {
       Task.create(name: 'Drink Water', iconName: AppAssets.water),
       Task.create(name: 'Practice Instrument', iconName: AppAssets.guitar),
       Task.create(name: 'Read for 10 Minutes', iconName: AppAssets.book),
-      Task.create(name: 'Don\'t Smoke', iconName: AppAssets.smoking),
+      // Task.create(name: 'Don\'t Smoke', iconName: AppAssets.smoking),
     ],
     force: false,
   );

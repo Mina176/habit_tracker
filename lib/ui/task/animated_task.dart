@@ -24,7 +24,7 @@ class AnimatedTask extends StatefulWidget {
       _AnimatedTaskState(Duration(milliseconds: 300));
 }
 
-class _AnimatedTaskState extends AnimationControllerState<AnimatedTask> {
+class _AnimatedTaskState extends AnimationState<AnimatedTask> {
   _AnimatedTaskState(Duration duration) : super(duration);
 
   late final Animation<double> _curveAnimation;

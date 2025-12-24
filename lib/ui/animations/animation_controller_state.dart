@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-abstract class AnimationControllerState<T extends StatefulWidget>
-    extends State<T> with SingleTickerProviderStateMixin {
-  AnimationControllerState(this.animationDuration);
+abstract class AnimationState<T extends StatefulWidget> extends State<T>
+    with SingleTickerProviderStateMixin {
+  AnimationState(this.animationDuration);
   final Duration animationDuration;
   late final animationController =
       AnimationController(vsync: this, duration: animationDuration);

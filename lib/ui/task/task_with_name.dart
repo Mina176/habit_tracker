@@ -48,6 +48,7 @@ class TaskWithName extends StatelessWidget {
             ],
           ),
         ),
+        SizedBox(height: 4),
         Text(
           task.name.toUpperCase(),
           style:
