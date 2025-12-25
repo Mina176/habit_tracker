@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
-class CustomScaleTransition extends StatelessWidget {
-  CustomScaleTransition({
+class StaggerdScaleTransition extends StatelessWidget {
+  StaggerdScaleTransition({
     super.key,
     required int index,
     required Animation<double> animation,

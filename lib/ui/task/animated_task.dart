@@ -21,7 +21,7 @@ class AnimatedTask extends StatefulWidget {
 
   @override
   _AnimatedTaskState createState() =>
-      _AnimatedTaskState(Duration(milliseconds: 300));
+      _AnimatedTaskState(Duration(milliseconds: 600));
 }
 
 class _AnimatedTaskState extends AnimationState<AnimatedTask> {
@@ -48,18 +48,20 @@ class _AnimatedTaskState extends AnimationState<AnimatedTask> {
   }
 
   void _checkStatusUpdates(AnimationStatus status) {
-    if (status == AnimationStatus.completed) widget.onCompleted?.call(true);
-    if (widget.hasCompletedState) {
-      if (mounted) {
-        setState(() => _showCheckIcon = true);
-      }
-      Future.delayed(const Duration(seconds: 1), () {
+    if (status == AnimationStatus.completed) {
+      widget.onCompleted?.call(true);
+      if (widget.hasCompletedState) {
         if (mounted) {
-          setState(() => _showCheckIcon = false);
+          setState(() => _showCheckIcon = true);
         }
-      });
-    } else {
-      animationController.value = 0.0;
+        Future.delayed(const Duration(milliseconds: 1500), () {
+          if (mounted) {
+            setState(() => _showCheckIcon = false);
+          }
+        });
+      } else {
+        animationController.value = 0.0;
+      }
     }
   }
 
@@ -68,7 +70,7 @@ class _AnimatedTaskState extends AnimationState<AnimatedTask> {
         !widget.isEditing &&
         animationController.status != AnimationStatus.completed) {
       animationController.forward();
-    } else if (!_showCheckIcon) {
+    } else if (!_showCheckIcon && !widget.isEditing) {
       widget.onCompleted?.call(false);
       animationController.reset();
     }

@@ -10,13 +10,14 @@ class AddTaskItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TaskWithName(
-      task: Task(
-        id: '',
-        name: 'Add a task',
-        iconName: AppAssets.plus,
-      ),
-      hasCompletedState: false,
-      onCompleted: (completed) => onCompleted?.call(),
-    );
+        task: Task(
+          id: '',
+          name: 'Add a task',
+          iconName: AppAssets.plus,
+        ),
+        hasCompletedState: false,
+        onCompleted: (completed) {
+          onCompleted?.call();
+        });
   }
 }
