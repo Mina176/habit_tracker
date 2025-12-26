@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habit_tracker/models/front_or_back_side.dart';
 import 'package:habit_tracker/models/task.dart';
 import 'package:habit_tracker/persistence/hive_data_store.dart';
 import 'package:habit_tracker/ui/home/tasks_grid.dart';
@@ -36,40 +37,50 @@ class _HomePageState extends ConsumerState<HomePage> {
       color: Colors.black,
       child: PageFlipBuilder(
         key: _pageFlipKey,
-        frontBuilder: (_) => ValueListenableBuilder(
-          valueListenable: dataStore.frontTasksListenable(),
-          builder: (_, Box<Task> box, __) => TasksGridPage(
-            key: const ValueKey(1),
-            leftAnimatorKey: _frontSlidingPanelLeftAnimatorKey,
-            rightAnimatorKey: _frontSlidingPanelRightAnimatorKey,
-            gridKey: _frontGridKey,
-            tasks: box.values.toList(),
-            onFlip: () => _pageFlipKey.currentState?.flip(),
-            themeSettings: ref.watch(frontThemeManagerProvider),
-            onColorIndexSelected: (colorIndex) => ref
-                .read(frontThemeManagerProvider.notifier)
-                .updateColorIndex(colorIndex),
-            onVariantIndexSelected: (variantIndex) => ref
-                .read(frontThemeManagerProvider.notifier)
-                .updateVariantIndex(variantIndex),
+        frontBuilder: (_) => ProviderScope(
+          overrides: [
+            frontOrBackSideProvider.overrideWithValue(FrontOrBackSide.front),
+          ],
+          child: ValueListenableBuilder(
+            valueListenable: dataStore.frontTasksListenable(),
+            builder: (_, Box<Task> box, __) => TasksGridPage(
+              key: const ValueKey(1),
+              leftAnimatorKey: _frontSlidingPanelLeftAnimatorKey,
+              rightAnimatorKey: _frontSlidingPanelRightAnimatorKey,
+              gridKey: _frontGridKey,
+              tasks: box.values.toList(),
+              onFlip: () => _pageFlipKey.currentState?.flip(),
+              themeSettings: ref.watch(frontThemeManagerProvider),
+              onColorIndexSelected: (colorIndex) => ref
+                  .read(frontThemeManagerProvider.notifier)
+                  .updateColorIndex(colorIndex),
+              onVariantIndexSelected: (variantIndex) => ref
+                  .read(frontThemeManagerProvider.notifier)
+                  .updateVariantIndex(variantIndex),
+            ),
           ),
         ),
-        backBuilder: (_) => ValueListenableBuilder(
-          valueListenable: dataStore.backTasksListenable(),
-          builder: (_, Box<Task> box, __) => TasksGridPage(
-            key: const ValueKey(2),
-            leftAnimatorKey: _backSlidingPanelLeftAnimatorKey,
-            rightAnimatorKey: _backSlidingPanelRightAnimatorKey,
-            gridKey: _backGridKey,
-            tasks: box.values.toList(),
-            onFlip: () => _pageFlipKey.currentState?.flip(),
-            themeSettings: ref.watch(backThemeManagerProvider),
-            onColorIndexSelected: (colorIndex) => ref
-                .read(backThemeManagerProvider.notifier)
-                .updateColorIndex(colorIndex),
-            onVariantIndexSelected: (variantIndex) => ref
-                .read(backThemeManagerProvider.notifier)
-                .updateVariantIndex(variantIndex),
+        backBuilder: (_) => ProviderScope(
+          overrides: [
+            frontOrBackSideProvider.overrideWithValue(FrontOrBackSide.back),
+          ],
+          child: ValueListenableBuilder(
+            valueListenable: dataStore.backTasksListenable(),
+            builder: (_, Box<Task> box, __) => TasksGridPage(
+              key: const ValueKey(2),
+              leftAnimatorKey: _backSlidingPanelLeftAnimatorKey,
+              rightAnimatorKey: _backSlidingPanelRightAnimatorKey,
+              gridKey: _backGridKey,
+              tasks: box.values.toList(),
+              onFlip: () => _pageFlipKey.currentState?.flip(),
+              themeSettings: ref.watch(backThemeManagerProvider),
+              onColorIndexSelected: (colorIndex) => ref
+                  .read(backThemeManagerProvider.notifier)
+                  .updateColorIndex(colorIndex),
+              onVariantIndexSelected: (variantIndex) => ref
+                  .read(backThemeManagerProvider.notifier)
+                  .updateVariantIndex(variantIndex),
+            ),
           ),
         ),
       ),

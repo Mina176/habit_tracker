@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:habit_tracker/models/front_or_back_side.dart';
 import 'package:habit_tracker/models/task.dart';
 import 'package:habit_tracker/ui/add_task/add_task_navigator.dart';
 import 'package:habit_tracker/ui/add_task/task_details_page.dart';
-import 'package:habit_tracker/ui/animations/animation_controller_state.dart';
 import 'package:habit_tracker/ui/animations/custom_fade_transition.dart';
 import 'package:habit_tracker/ui/animations/staggerd_scale_transition.dart';
 import 'package:habit_tracker/ui/task/add_task_item.dart';
@@ -27,7 +25,8 @@ class TasksGrid extends StatefulWidget {
   TasksGridState createState() => TasksGridState();
 }
 
-class TasksGridState extends State<TasksGrid> {
+class TasksGridState extends State<TasksGrid>
+    with SingleTickerProviderStateMixin {
   late final animationController =
       AnimationController(vsync: this, duration: Duration(milliseconds: 300));
   bool _isEditing = false;
@@ -47,10 +46,10 @@ class TasksGridState extends State<TasksGrid> {
 
   Future<void> _addTask(WidgetRef ref) async {
     widget.onAddOrEditTask?.call();
-    Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(Duration(milliseconds: 200));
     final appTheme = AppTheme.of(context);
     final frontOrBackSide = ref.read<FrontOrBackSide>(frontOrBackSideProvider);
-    await showCupertinoSheet<void>(
+    await showCupertinoModalPopup<void>(
       context: context,
       builder: (_) => AppTheme(
         data: appTheme,
@@ -63,7 +62,7 @@ class TasksGridState extends State<TasksGrid> {
 
   Future<void> _editTask(WidgetRef ref, Task task) async {
     widget.onAddOrEditTask?.call();
-    Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(Duration(milliseconds: 200));
     final appTheme = AppTheme.of(context);
     final frontOrBackSide = ref.read<FrontOrBackSide>(frontOrBackSideProvider);
     await showCupertinoSheet<void>(
@@ -105,8 +104,7 @@ class TasksGridState extends State<TasksGrid> {
                   builder: (context, ref, _) => CustomFadeTransition(
                         animation: animationController,
                         child: AddTaskItem(
-                          onCompleted:
-                              _isEditing ? () => _addTask(context) : null,
+                          onCompleted: _isEditing ? () => _addTask(ref) : null,
                         ),
                       ));
             }
@@ -117,10 +115,12 @@ class TasksGridState extends State<TasksGrid> {
               editTaskButtonBuilder: (_) => StaggerdScaleTransition(
                 animation: animationController,
                 index: index,
-                child: EditTaskButton(
-                  onPressed: () => _editTask(
-                    context,
-                    task,
+                child: Consumer(
+                  builder: (context, ref, __) => EditTaskButton(
+                    onPressed: () => _editTask(
+                      ref,
+                      task,
+                    ),
                   ),
                 ),
               ),

@@ -30,7 +30,6 @@ class AddTaskNavigator extends StatelessWidget {
                 name: taskPreset.name,
                 iconName: taskPreset.iconName,
               );
-
               return TaskDetailsPage(
                 task: task,
                 isNew: true,
