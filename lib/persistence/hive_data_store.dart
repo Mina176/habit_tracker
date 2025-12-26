@@ -26,8 +26,8 @@ class HiveDataStore {
     // open boxes
     // task lists
     await Hive.openBox<Task>(frontTasksBoxName);
-    await Hive.openBox<Task>(frontTasksBoxName);
     await Hive.openBox<Task>(backTasksBoxName);
+    await Hive.openBox<bool>(flagsBoxName);
     // task state
     await Hive.openBox<TaskState>(tasksStateBoxName);
     // theming

@@ -5,6 +5,7 @@ import 'package:habit_tracker/models/front_or_back_side.dart';
 import 'package:habit_tracker/models/task.dart';
 import 'package:habit_tracker/persistence/hive_data_store.dart';
 import 'package:habit_tracker/ui/home/home_page.dart';
+import 'package:habit_tracker/ui/onboarding/home_or_onboarding.dart';
 import 'package:habit_tracker/ui/theming/app_theme_manager.dart';
 
 Future<void> main() async {
@@ -53,20 +54,7 @@ class MainApp extends StatelessWidget {
         hoverColor: Colors.transparent,
         highlightColor: Colors.transparent,
       ),
-      initialRoute: 'home',
-      routes: {
-        'home': (context) => const HomePage(),
-        'test': (context) => const Test(),
-      },
+      home: HomeOrOnboarding(),
     );
-  }
-}
-
-class Test extends StatelessWidget {
-  const Test({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return HomePage();
   }
 }
