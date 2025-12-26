@@ -3,11 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habit_tracker/constants/app_assets.dart';
 import 'package:habit_tracker/models/front_or_back_side.dart';
 import 'package:habit_tracker/models/task.dart';
-import 'package:habit_tracker/models/task_preset.dart';
 import 'package:habit_tracker/persistence/hive_data_store.dart';
 import 'package:habit_tracker/ui/home/home_page.dart';
 import 'package:habit_tracker/ui/theming/app_theme_manager.dart';
-import 'package:habit_tracker/ui/widgets/add_task_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

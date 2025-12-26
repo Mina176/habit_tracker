@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habit_tracker/constants/app_colors.dart';
 import 'package:habit_tracker/models/front_or_back_side.dart';
@@ -14,7 +13,6 @@ import 'package:habit_tracker/ui/task/add_task_item.dart';
 import 'package:habit_tracker/ui/task/task_with_name_loader.dart';
 import 'package:habit_tracker/ui/theming/app_theme.dart';
 import 'package:habit_tracker/ui/widgets/edit_task_button.dart';
-import 'package:habit_tracker/ui/widgets/add_task_page.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class TasksGrid extends StatefulWidget {
