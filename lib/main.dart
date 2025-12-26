@@ -12,25 +12,6 @@ Future<void> main() async {
   await AppAssets.preloadSVGs();
   final dataStore = HiveDataStore();
   await dataStore.init();
-  await dataStore.createDemoTasks(
-    frontTasks: [
-      Task.create(name: 'Decrease Screen Time', iconName: AppAssets.phone),
-      Task.create(name: 'Do a Workout', iconName: AppAssets.dumbell),
-      Task.create(name: 'Do Karate', iconName: AppAssets.karate),
-      Task.create(name: 'Go Running', iconName: AppAssets.run),
-      Task.create(name: 'Go Swimming', iconName: AppAssets.swimmer),
-      // Task.create(name: 'Do Some Stretches', iconName: AppAssets.stretching),
-    ],
-    backTasks: [
-      Task.create(name: 'Brush Your Teeth', iconName: AppAssets.toothbrush),
-      Task.create(name: 'Floss Your Teeth', iconName: AppAssets.dentalFloss),
-      Task.create(name: 'Drink Water', iconName: AppAssets.water),
-      Task.create(name: 'Practice Instrument', iconName: AppAssets.guitar),
-      Task.create(name: 'Read for 10 Minutes', iconName: AppAssets.book),
-      // Task.create(name: 'Don\'t Smoke', iconName: AppAssets.smoking),
-    ],
-    force: false,
-  );
   final frontThemeSettings =
       await dataStore.appThemeSettings(side: FrontOrBackSide.front);
   final backThemeSettings =
