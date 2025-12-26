@@ -52,13 +52,21 @@ class HiveDataStore {
         : backBox.add(task);
   }
 
-  deleteTask(Task task, FrontOrBackSide side) async {
-    final frontBox = Hive.box<Task>(frontTasksBoxName);
-    final backBox = Hive.box<Task>(backTasksBoxName);
+  deleteTask(Task task, FrontOrBackSide frontOrBackSide) async {
+    final boxName = frontOrBackSide == FrontOrBackSide.front
+        ? frontTasksBoxName
+        : backTasksBoxName;
 
-    await side == FrontOrBackSide.front
-        ? frontBox.delete(task)
-        : backBox.delete(task);
+    final box = Hive.box<Task>(boxName);
+
+    if (box.isNotEmpty) {
+      final index = box.values
+          .toList()
+          .indexWhere((taskAtIndex) => taskAtIndex.id == task.id);
+      if (index >= 0) {
+        await box.deleteAt(index);
+      }
+    }
   }
 
   Future<void> setDidAddFirstTask(bool value) async {
