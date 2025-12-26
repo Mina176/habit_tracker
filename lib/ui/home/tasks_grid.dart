@@ -7,7 +7,6 @@ import 'package:habit_tracker/models/front_or_back_side.dart';
 import 'package:habit_tracker/models/task.dart';
 import 'package:habit_tracker/ui/add_task/add_task_navigator.dart';
 import 'package:habit_tracker/ui/add_task/task_details_page.dart';
-import 'package:habit_tracker/ui/animations/custom_fade_transition.dart';
 import 'package:habit_tracker/ui/animations/staggerd_scale_transition.dart';
 import 'package:habit_tracker/ui/task/add_task_item.dart';
 import 'package:habit_tracker/ui/task/task_with_name_loader.dart';
@@ -102,11 +101,8 @@ class TasksGridState extends State<TasksGrid>
           itemBuilder: (context, index) {
             if (index == widget.tasks.length) {
               return Consumer(
-                  builder: (context, ref, _) => CustomFadeTransition(
-                        animation: animationController,
-                        child: AddTaskItem(
-                          onCompleted: _isEditing ? () => _addTask(ref) : null,
-                        ),
+                  builder: (context, ref, _) => AddTaskItem(
+                        onCompleted: () => _addTask(ref), 
                       ));
             }
             final task = widget.tasks[index];
