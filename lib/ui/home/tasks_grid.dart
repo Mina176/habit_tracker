@@ -102,11 +102,8 @@ class TasksGridState extends State<TasksGrid>
           itemBuilder: (context, index) {
             if (index == widget.tasks.length) {
               return Consumer(
-                  builder: (context, ref, _) => CustomFadeTransition(
-                        animation: animationController,
-                        child: AddTaskItem(
-                          onCompleted: _isEditing ? () => _addTask(ref) : null,
-                        ),
+                  builder: (context, ref, _) => AddTaskItem(
+                        onCompleted: () => _addTask(ref),
                       ));
             }
             final task = widget.tasks[index];
