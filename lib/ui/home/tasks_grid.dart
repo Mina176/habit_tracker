@@ -1,25 +1,35 @@
 import 'dart:math';
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habit_tracker/models/front_or_back_side.dart';
 import 'package:habit_tracker/models/task.dart';
+import 'package:habit_tracker/ui/add_task/add_task_navigator.dart';
+import 'package:habit_tracker/ui/add_task/task_details_page.dart';
 import 'package:habit_tracker/ui/animations/animation_controller_state.dart';
 import 'package:habit_tracker/ui/animations/custom_fade_transition.dart';
 import 'package:habit_tracker/ui/animations/staggerd_scale_transition.dart';
 import 'package:habit_tracker/ui/task/add_task_item.dart';
 import 'package:habit_tracker/ui/task/task_with_name_loader.dart';
+import 'package:habit_tracker/ui/theming/app_theme.dart';
 import 'package:habit_tracker/ui/widgets/edit_task_button.dart';
+import 'package:habit_tracker/ui/widgets/add_task_page.dart';
 
 class TasksGrid extends StatefulWidget {
-  const TasksGrid({super.key, required this.tasks, this.onEditTask});
+  const TasksGrid(
+      {super.key, required this.tasks, required this.onAddOrEditTask});
   final List<Task> tasks;
-  final VoidCallback? onEditTask;
+  final VoidCallback? onAddOrEditTask;
 
   @override
-  TasksGridState createState() => TasksGridState(Duration(milliseconds: 300));
+  TasksGridState createState() => TasksGridState();
 }
 
-class TasksGridState extends AnimationState<TasksGrid> {
-  TasksGridState(Duration duration) : super(duration);
+class TasksGridState extends State<TasksGrid> {
+  late final animationController =
+      AnimationController(vsync: this, duration: Duration(milliseconds: 300));
   bool _isEditing = false;
   void enterEditMode() {
     animationController.forward();
@@ -33,6 +43,40 @@ class TasksGridState extends AnimationState<TasksGrid> {
     setState(() {
       _isEditing = false;
     });
+  }
+
+  Future<void> _addTask(WidgetRef ref) async {
+    widget.onAddOrEditTask?.call();
+    Future.delayed(Duration(milliseconds: 200));
+    final appTheme = AppTheme.of(context);
+    final frontOrBackSide = ref.read<FrontOrBackSide>(frontOrBackSideProvider);
+    await showCupertinoSheet<void>(
+      context: context,
+      builder: (_) => AppTheme(
+        data: appTheme,
+        child: AddTaskNavigator(
+          frontOrBackSide: frontOrBackSide,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _editTask(WidgetRef ref, Task task) async {
+    widget.onAddOrEditTask?.call();
+    Future.delayed(Duration(milliseconds: 200));
+    final appTheme = AppTheme.of(context);
+    final frontOrBackSide = ref.read<FrontOrBackSide>(frontOrBackSideProvider);
+    await showCupertinoSheet<void>(
+      context: context,
+      builder: (_) => AppTheme(
+        data: appTheme,
+        child: TaskDetailsPage(
+          task: task,
+          isNew: false,
+          side: frontOrBackSide,
+        ),
+      ),
+    );
   }
 
   @override
@@ -57,12 +101,14 @@ class TasksGridState extends AnimationState<TasksGrid> {
           ),
           itemBuilder: (context, index) {
             if (index == widget.tasks.length) {
-              return CustomFadeTransition(
-                animation: animationController,
-                child: AddTaskItem(
-                  onCompleted: _isEditing ? () => print('object') : null,
-                ),
-              );
+              return Consumer(
+                  builder: (context, ref, _) => CustomFadeTransition(
+                        animation: animationController,
+                        child: AddTaskItem(
+                          onCompleted:
+                              _isEditing ? () => _addTask(context) : null,
+                        ),
+                      ));
             }
             final task = widget.tasks[index];
             return TaskWithNameLoader(
@@ -72,7 +118,10 @@ class TasksGridState extends AnimationState<TasksGrid> {
                 animation: animationController,
                 index: index,
                 child: EditTaskButton(
-                  onPressed: () => debugPrint('Edit Item'),
+                  onPressed: () => _editTask(
+                    context,
+                    task,
+                  ),
                 ),
               ),
             );

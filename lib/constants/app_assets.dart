@@ -72,6 +72,8 @@ class AppAssets {
     water,
   ];
 
+  static const iconSize = 18.0;
+
   static Future<void> preloadSVGs() async {
     final assets = [
       // system UI
