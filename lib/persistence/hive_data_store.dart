@@ -26,8 +26,8 @@ class HiveDataStore {
     // open boxes
     // task lists
     await Hive.openBox<Task>(frontTasksBoxName);
-    await Hive.openBox<Task>(frontTasksBoxName);
     await Hive.openBox<Task>(backTasksBoxName);
+    await Hive.openBox<bool>(flagsBoxName);
     // task state
     await Hive.openBox<TaskState>(tasksStateBoxName);
     // theming
@@ -74,27 +74,6 @@ class HiveDataStore {
   bool didAddFirstTask(Box<bool> box) {
     final value = box.get(didAddFirstTaskKey);
     return value ?? false;
-  }
-
-  Future<void> createDemoTasks({
-    required List<Task> frontTasks,
-    required List<Task> backTasks,
-    bool force = false,
-  }) async {
-    final frontBox = Hive.box<Task>(frontTasksBoxName);
-    if (frontBox.isEmpty || force == true) {
-      await frontBox.clear();
-      await frontBox.addAll(frontTasks);
-    } else {
-      print('frontBox Already has ${frontBox.length}');
-    }
-    final backBox = Hive.box<Task>(backTasksBoxName);
-    if (backBox.isEmpty || force == true) {
-      await backBox.clear();
-      await backBox.addAll(backTasks);
-    } else {
-      print('backBox Already has ${backBox.length}');
-    }
   }
 
   ValueListenable<Box<TaskState>> tasksStateListenable({required Task task}) {

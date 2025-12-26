@@ -50,14 +50,8 @@ class _SelectIconGridState extends State<SelectIconGrid> {
   late String _selectedIconName = widget.selectedIconName;
 
   void _select(String selectedIconName) {
-    // * If the currently selected icon is chosen again
-    if (_selectedIconName == selectedIconName) {
-      // * call the callback, which will dismiss the page and return the icon name
-      widget.onSelectedIcon?.call(selectedIconName);
-    } else {
-      // * Otherwise update the state (but don't call anything just yet)
-      setState(() => _selectedIconName = selectedIconName);
-    }
+    setState(() => _selectedIconName = selectedIconName);
+    widget.onSelectedIcon?.call(selectedIconName);
   }
 
   @override
