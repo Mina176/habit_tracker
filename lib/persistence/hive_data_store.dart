@@ -12,6 +12,8 @@ class HiveDataStore {
   static const tasksStateBoxName = 'tasksState';
   static const frontAppThemeBoxName = 'frontAppTheme';
   static const backAppThemeBoxName = 'backAppTheme';
+  static const flagsBoxName = 'flags';
+  static const didAddFirstTaskKey = 'didAddFirstTask';
 
   static String taskStateKey(String key) => 'taskState_$key';
 
@@ -23,6 +25,7 @@ class HiveDataStore {
     Hive.registerAdapter<AppThemeSettings>(AppThemeSettingsAdapter());
     // open boxes
     // task lists
+    await Hive.openBox<Task>(frontTasksBoxName);
     await Hive.openBox<Task>(frontTasksBoxName);
     await Hive.openBox<Task>(backTasksBoxName);
     // task state
@@ -38,6 +41,39 @@ class HiveDataStore {
 
   ValueListenable<Box<Task>> backTasksListenable() {
     return Hive.box<Task>(backTasksBoxName).listenable();
+  }
+
+  addTask(Task task, FrontOrBackSide side) async {
+    final frontBox = Hive.box<Task>(frontTasksBoxName);
+    final backBox = Hive.box<Task>(backTasksBoxName);
+
+    await side == FrontOrBackSide.front
+        ? frontBox.add(task)
+        : backBox.add(task);
+  }
+
+  deleteTask(Task task, FrontOrBackSide side) async {
+    final frontBox = Hive.box<Task>(frontTasksBoxName);
+    final backBox = Hive.box<Task>(backTasksBoxName);
+
+    await side == FrontOrBackSide.front
+        ? frontBox.delete(task)
+        : backBox.delete(task);
+  }
+
+  Future<void> setDidAddFirstTask(bool value) async {
+    final box = Hive.box<bool>(flagsBoxName);
+    await box.put(didAddFirstTaskKey, value);
+  }
+
+  ValueListenable<Box<bool>> didAddFirstTaskListenable() {
+    return Hive.box<bool>(flagsBoxName)
+        .listenable(keys: <String>[didAddFirstTaskKey]);
+  }
+
+  bool didAddFirstTask(Box<bool> box) {
+    final value = box.get(didAddFirstTaskKey);
+    return value ?? false;
   }
 
   Future<void> createDemoTasks({
