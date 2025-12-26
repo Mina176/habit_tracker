@@ -41,15 +41,15 @@ class AddTaskPage extends StatelessWidget {
                   SizedBox(
                     height: 32,
                   ),
-                  Text('   CREATE YOUR OWN'),
                   CustomTextField(
-                    buttonColor: AppTheme.of(context).accentNegative,
+                    label: 'CREATE YOUR OWN:',
+                    buttonsColor: AppTheme.of(context).accentNegative,
                     textColor: Colors.black,
                   ),
                   SizedBox(
                     height: 32,
                   ),
-                  Text('   OR CHOOSE A PRESET:'),
+                  Text('      OR CHOOSE A PRESET:'),
                 ],
               ),
             ),
@@ -76,10 +76,12 @@ class CustomTextField extends StatefulWidget {
   const CustomTextField({
     super.key,
     required this.textColor,
-    required this.buttonColor,
+    required this.buttonsColor,
+    required this.label,
   });
   final Color textColor;
-  final Color buttonColor;
+  final Color buttonsColor;
+  final String label;
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -100,51 +102,60 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: _textController,
-      cursorColor: widget.textColor,
-      style: TextStyle(
-        color: widget.textColor,
-      ),
-      decoration: InputDecoration(
-        hintStyle: TextStyle(color: widget.textColor),
-        suffixIcon: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              onPressed: () {
-                clearText();
-              },
-              icon: Icon(
-                Icons.close,
-                size: AppAssets.iconSize,
-              ),
-            ),
-            Container(
-              width: 50,
-              height: 50,
-              color: widget.buttonColor,
-              child: IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: Colors.white,
-                  size: AppAssets.iconSize,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('      ${widget.label}'),
+        SizedBox(
+          height: 8,
+        ),
+        TextField(
+          controller: _textController,
+          cursorColor: widget.textColor,
+          style: TextStyle(
+            color: widget.textColor,
+          ),
+          decoration: InputDecoration(
+            hintStyle: TextStyle(color: widget.textColor),
+            suffixIcon: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    clearText();
+                  },
+                  icon: Icon(
+                    Icons.close,
+                    size: AppAssets.iconSize,
+                  ),
                 ),
-              ),
-            )
-          ],
+                Container(
+                  width: 50,
+                  height: 50,
+                  color: widget.buttonsColor,
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      color: Colors.white,
+                      size: AppAssets.iconSize,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            filled: true,
+            fillColor: Color(0xFFDDDDDD),
+            hintText: 'Enter Task Title...',
+            enabledBorder: const OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.grey, width: 0.0),
+            ),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.grey, width: 0.0),
+            ),
+          ),
         ),
-        filled: true,
-        fillColor: Color(0xFFDDDDDD),
-        hintText: 'Enter Task Title...',
-        enabledBorder: const OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.grey, width: 0.0),
-        ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.grey, width: 0.0),
-        ),
-      ),
+      ],
     );
   }
 }

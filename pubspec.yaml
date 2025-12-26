@@ -13,6 +13,7 @@ dependencies:
   flutter_svg: ^2.2.3
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  modal_bottom_sheet: ^3.0.0
   page_flip_builder: ^0.1.4
   uuid: ^4.5.2
 
@@ -28,3 +29,8 @@ flutter:
 
   assets:
     - assets/
+  fonts:
+    - family: Helvetica Neue
+      fonts:
+        - asset: assets\fonts\HelveticaNeueMedium.otf
+          weight: 700
