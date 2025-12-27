@@ -60,7 +60,7 @@ class TasksGridState extends State<TasksGrid>
     );
   }
 
-  Future<void> _editTask(WidgetRef ref, Task task) async {
+  Future<void> _editTask(Task task, WidgetRef ref) async {
     widget.onAddOrEditTask?.call();
     await Future.delayed(Duration(milliseconds: 200));
     final appTheme = AppTheme.of(context);
@@ -102,7 +102,7 @@ class TasksGridState extends State<TasksGrid>
             if (index == widget.tasks.length) {
               return Consumer(
                   builder: (context, ref, _) => AddTaskItem(
-                        onCompleted: () => _addTask(ref), 
+                        onCompleted: () => _addTask(ref),
                       ));
             }
             final task = widget.tasks[index];
@@ -115,8 +115,8 @@ class TasksGridState extends State<TasksGrid>
                 child: Consumer(
                   builder: (context, ref, __) => EditTaskButton(
                     onPressed: () => _editTask(
-                      ref,
                       task,
+                      ref,
                     ),
                   ),
                 ),

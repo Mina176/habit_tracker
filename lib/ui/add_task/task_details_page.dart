@@ -35,7 +35,12 @@ class TaskDetailsPage extends StatelessWidget {
               ? Navigator.of(context).pop()
               : Navigator.of(context, rootNavigator: true).pop(),
         ),
-        title: Text('Confirm Task'),
+        title: Text(
+          'Confirm Task',
+          style: TextStyle(
+            color: AppTheme.of(context).settingsLabel,
+          ),
+        ),
       ),
       backgroundColor: AppTheme.of(context).primary,
       body: ConfirmTaskContents(
@@ -83,7 +88,7 @@ class _ConfirmTaskContentsState extends ConsumerState<ConfirmTaskContents> {
         final dataStore = ref.read<HiveDataStore>(dataStoreProvider);
         // * Once the first task is added, we no longer need to show the onboarding screen
         await dataStore.setDidAddFirstTask(true);
-        await dataStore.addTask(task, widget.frontOrBackSide);
+        await dataStore.saveTask(task, widget.frontOrBackSide);
         // * Pop back to HomePage, using `rootNavigator: true` to ensure we dismiss the entire navigation stack.
         navigator.pop();
       } catch (e) {

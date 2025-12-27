@@ -43,22 +43,32 @@ class HiveDataStore {
     return Hive.box<Task>(backTasksBoxName).listenable();
   }
 
-  addTask(Task task, FrontOrBackSide side) async {
-    final frontBox = Hive.box<Task>(frontTasksBoxName);
-    final backBox = Hive.box<Task>(backTasksBoxName);
+  // Save and delete tasks
+  saveTask(Task task, FrontOrBackSide frontOrBackSide) async {
+    final boxName = frontOrBackSide == FrontOrBackSide.front
+        ? frontTasksBoxName
+        : backTasksBoxName;
 
-    await side == FrontOrBackSide.front
-        ? frontBox.add(task)
-        : backBox.add(task);
+    final box = Hive.box<Task>(boxName);
+    if (box.values.isEmpty) {
+      await box.add(task);
+    } else {
+      final index = box.values
+          .toList()
+          .indexWhere((taskAtIndex) => taskAtIndex.id == task.id);
+      if (index >= 0) {
+        await box.putAt(index, task);
+      } else {
+        await box.add(task);
+      }
+    }
   }
 
   deleteTask(Task task, FrontOrBackSide frontOrBackSide) async {
     final boxName = frontOrBackSide == FrontOrBackSide.front
         ? frontTasksBoxName
         : backTasksBoxName;
-
     final box = Hive.box<Task>(boxName);
-
     if (box.isNotEmpty) {
       final index = box.values
           .toList()
