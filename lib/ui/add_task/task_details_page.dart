@@ -38,7 +38,7 @@ class TaskDetailsPage extends StatelessWidget {
         title: Text(
           'Confirm Task',
           style: TextStyle(
-            color: AppTheme.of(context).settingsLabel,
+            color: AppTheme.of(context).settingsText,
           ),
         ),
       ),

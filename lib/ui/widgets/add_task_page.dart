@@ -60,7 +60,6 @@ class AddTaskContents extends StatelessWidget {
               TextFieldHeader(
                 'CREATE YOUR OWN:',
               ),
-              SizedBox(height: 8),
               CustomTextField(
                 hintText: 'Enter task title...',
                 onSubmit: (value) {
@@ -77,7 +76,6 @@ class AddTaskContents extends StatelessWidget {
                 height: 32,
               ),
               TextFieldHeader('CHOOSE A PRESET:'),
-              SizedBox(height: 8),
             ],
           ),
         ),
