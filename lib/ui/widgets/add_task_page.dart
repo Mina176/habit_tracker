@@ -30,6 +30,7 @@ class AddTaskPage extends StatelessWidget {
             color: AppTheme.of(context).settingsText,
           ),
         ),
+        scrolledUnderElevation: 0.0,
       ),
       backgroundColor: AppTheme.of(context).primary,
       body: Padding(

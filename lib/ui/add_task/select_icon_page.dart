@@ -25,7 +25,7 @@ class SelectIconPage extends StatelessWidget {
             color: AppTheme.of(context).settingsText,
           ),
         ),
-        elevation: 0,
+        scrolledUnderElevation: 0.0,
       ),
       backgroundColor: AppTheme.of(context).primary,
       body: SelectIconGrid(
