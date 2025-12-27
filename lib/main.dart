@@ -43,14 +43,17 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          scrolledUnderElevation: 0.0,
+        ),
         fontFamily: 'Helvetica Neue',
         inputDecorationTheme: InputDecorationTheme(
           fillColor: Colors.grey[200],
           contentPadding: EdgeInsets.only(left: 16),
         ),
-        splashColor: Colors.transparent,
-        hoverColor: Colors.transparent,
-        highlightColor: Colors.transparent,
+        splashColor: Colors.white,
+        hoverColor: Colors.white,
+        highlightColor: Colors.white,
       ),
       home: HomeOrOnboarding(),
     );
